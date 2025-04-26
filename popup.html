@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auto Join Meet</title>
+  <style>
+    /* Global reset and background */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      width: 350px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #2c2c2c, #1a1a1a);
+      color: #fff;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    h3 {
+      font-size: 24px;
+      text-align: center;
+      color: #fff;
+      margin-bottom: 30px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    input,
+    button {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      background-color: #fff;
+      transition: 0.3s ease-in-out;
+    }
+
+    input:focus,
+    button:focus {
+      outline: none;
+      box-shadow: 0 0 8px rgba(0, 255, 0, 0.6);
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #countdown {
+      margin-top: 20px;
+      font-size: 16px;
+      color: #ffcc00;
+      text-align: center;
+    }
+
+    #scheduledMeet {
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      display: none;
+      backdrop-filter: blur(10px);
+      color: #fff;
+      font-family: 'Arial', sans-serif;
+    }
+
+    #scheduledMeet h4 {
+      color: #4ade80;
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    #scheduledMeet p {
+      color: #fff;
+      font-size: 1rem;
+      margin: 5px 0;
+    }
+
+    #scheduledMeet #countdown {
+      font-size: 1.25rem;
+      color: #ffcc00;
+      font-weight: 500;
+    }
+
+    #scheduledMeet button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #f87171;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    #scheduledMeet button:hover {
+      background-color: #e11d48;
+    }
+
+    #deleteButton {
+      background-color: #f87171;
+      color: white;
+      font-size: 14px;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      width: auto;
+      margin-top: 15px;
+      transition: background-color 0.3s ease;
+    }
+
+    #deleteButton:hover {
+      background-color: #dc2626;
+    }
+
+    #toast {
+      padding: 3px 8px;
+      color: #1f1c2c;
+      font-size: medium;
+      font-weight: 500;
+      border-radius: 8px;
+    }
+
+    /* Updated Footer Styles */
+    .footer {
+      margin-top: 50px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      text-align: center;
+      color: #ccc;
+      font-size: 14px;
+    }
+
+    .footer-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .footer-logo {
+      width: 25px;
+      height: 25px;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 15px;
+      justify-content: space-between;
+    }
+
+    .footer-links a {
+      color: #ffcc00;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
+    .footer-copy {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #aaa;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="content">
+    <h3>📅 Schedule Google Meet</h3>
+
+    <div id="scheduledMeet" style="display: none;">
+      <h4>Scheduled Meet:</h4>
+      <p id="meetLinkText"></p>
+      <p id="meetTimeText"></p>
+      <div id="countdown"></div>
+      <button id="deleteButton">Delete Scheduled Meet</button>
+    </div>
+
+    <div id="formContainer">
+      <div class="form-group">
+        <input type="text" id="link" placeholder="Enter Meet link (https://meet.google.com/...)" />
+      </div>
+      <div class="form-group">
+        <input type="datetime-local" id="time" />
+      </div>
+      <button id="save">Schedule Meet</button>
+    </div>
+    <div id="toast" style="display: none;"></div>
+
+    <!-- Updated Footer Section -->
+    <div class="footer">
+      <div class="footer-content">
+        <div class="footer-links">
+          <img src="https://i.ibb.co/K0NmH2J/favicon.png" alt="Logo" class="footer-logo">
+          <a href="https://joychandrauday-nexus.vercel.app/" target="_blank" title="Visit Website">🌍 Website</a>
+          <a href="mailto:joychandrauday@gmail.com" title="Send Email">✉ Email</a>
+          <a href="https://github.com/joychandrauday" target="_blank" title="GitHub Profile">👩‍💻 GitHub</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+
+</html>
