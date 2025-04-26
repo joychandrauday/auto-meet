@@ -2,7 +2,7 @@
 
 Easily schedule your online meetings and get notified when it's time to join!
 
-![Meet Scheduler Banner](banner.png)
+![Meet Scheduler Banner](assets/4.png)
 
 ---
 
